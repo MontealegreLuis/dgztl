@@ -89,5 +89,21 @@ abstract class BaseUser extends sfDoctrineRecord
         $this->hasMany('Car', array(
              'local' => 'id',
              'foreign' => 'user_id'));
+
+        $timestampable0 = new Doctrine_Template_Timestampable(array(
+             'created' => 
+             array(
+              'name' => 'date_created',
+              'type' => 'timestamp',
+              'format' => 'Y-m-d H:i:s',
+             ),
+             'updated' => 
+             array(
+              'name' => 'date_modified',
+              'type' => 'timestamp',
+              'format' => 'Y-m-d H:i:s',
+             ),
+             ));
+        $this->actAs($timestampable0);
     }
 }

@@ -1,16 +1,22 @@
 <?php
-
 /**
  * Car form.
  *
  * @package    dgztl
  * @subpackage form
- * @author     Your name here
- * @version    SVN: $Id: sfDoctrineFormTemplate.php 23810 2009-11-12 11:07:44Z Kris.Wallsmith $
+ * @author     Luis Montealegre <montealegreluis@gmail.com>
  */
 class CarForm extends BaseCarForm
 {
   public function configure()
   {
+  }
+
+  /**
+   * @param int $userId
+   */
+  public function setUserId($userId)
+  {
+      $this->setDefault('user_id', (int)$userId);
   }
 }

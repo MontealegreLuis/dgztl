@@ -1,5 +1,4 @@
 <?php
-
 /**
  * User form base class.
  *
@@ -7,8 +6,7 @@
  *
  * @package    dgztl
  * @subpackage form
- * @author     Your name here
- * @version    SVN: $Id: sfDoctrineFormGeneratedTemplate.php 29553 2010-05-20 14:33:00Z Kris.Wallsmith $
+ * @author     Luis Montealegre <montealegreluis@gmail.com>
  */
 abstract class BaseUserForm extends BaseFormDoctrine
 {
@@ -18,16 +16,12 @@ abstract class BaseUserForm extends BaseFormDoctrine
       'id'            => new sfWidgetFormInputHidden(),
       'first_name'    => new sfWidgetFormInputText(),
       'last_name'     => new sfWidgetFormInputText(),
-      'date_created'  => new sfWidgetFormDateTime(),
-      'date_modified' => new sfWidgetFormDateTime(),
     ));
 
     $this->setValidators(array(
       'id'            => new sfValidatorChoice(array('choices' => array($this->getObject()->get('id')), 'empty_value' => $this->getObject()->get('id'), 'required' => false)),
       'first_name'    => new sfValidatorString(array('max_length' => 45)),
       'last_name'     => new sfValidatorString(array('max_length' => 45)),
-      'date_created'  => new sfValidatorDateTime(),
-      'date_modified' => new sfValidatorDateTime(),
     ));
 
     $this->widgetSchema->setNameFormat('user[%s]');
@@ -43,5 +37,4 @@ abstract class BaseUserForm extends BaseFormDoctrine
   {
     return 'User';
   }
-
 }

@@ -1,6 +1,16 @@
 Car:
   connection: doctrine
   tableName: car
+  actAs:
+    Timestampable:
+      created:
+        name: date_created
+        type: timestamp
+        format: Y-m-d H:i:s
+      updated:
+        name: date_modified
+        type: timestamp
+        format: Y-m-d H:i:s
   columns:
     id:
       type: integer(4)
@@ -54,7 +64,7 @@ Car:
       notnull: true
       autoincrement: false
     date_modified:
-      type: string(45)
+      type: timestamp(25)
       fixed: false
       unsigned: false
       primary: false
@@ -75,6 +85,16 @@ Car:
 User:
   connection: doctrine
   tableName: user
+  actAs:
+    Timestampable:
+      created:
+        name: date_created
+        type: timestamp
+        format: Y-m-d H:i:s
+      updated:
+        name: date_modified
+        type: timestamp
+        format: Y-m-d H:i:s
   columns:
     id:
       type: integer(4)

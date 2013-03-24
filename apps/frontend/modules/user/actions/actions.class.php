@@ -1,27 +1,36 @@
 <?php
-
 /**
  * user actions.
  *
  * @package    dgztl
  * @subpackage user
- * @author     Your name here
- * @version    SVN: $Id: actions.class.php 23810 2009-11-12 11:07:44Z Kris.Wallsmith $
+ * @author     Luis Montealegre <luis.montealegre@mandragora-web-systems.com>
  */
 class userActions extends sfActions
 {
-  public function executeIndex(sfWebRequest $request)
-  {
-    $this->users = Doctrine_Core::getTable('User')
-      ->createQuery('a')
-      ->execute();
-  }
+    /**
+     * Retrieve all the users and the count of the cars that they own
+     *
+     * @param sfWebRequest $request
+     */
+    public function executeIndex(sfWebRequest $request)
+    {
+        $this->users = UserTable::getInstance()->findAllWithCarCount();
+    }
 
-  public function executeShow(sfWebRequest $request)
-  {
-    $this->user = Doctrine_Core::getTable('User')->find(array($request->getParameter('id')));
-    $this->forward404Unless($this->user);
-  }
+    /**
+     * Retrieve a single user by its numerical id and the information about the cars she
+     * owns
+     *
+     * @param sfWebRequest $request
+     */
+    public function executeShow(sfWebRequest $request)
+    {
+        $this->user = UserTable::getInstance()->findOneWithCarInfo(
+            $request->getParameter('id')
+        );
+        $this->forward404Unless($this->user);
+    }
 
   public function executeNew(sfWebRequest $request)
   {
