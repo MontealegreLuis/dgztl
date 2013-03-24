@@ -1,6 +1,6 @@
 <?php
 /**
- * car actions.
+ * Car actions.
  *
  * @package    dgztl
  * @subpackage car
@@ -16,72 +16,125 @@ class carActions extends sfActions
      */
     public function executeIndex(sfWebRequest $request)
     {
-      $this->forward404();
+        $this->forward404();
     }
 
-  public function executeShow(sfWebRequest $request)
-  {
-    $this->car = Doctrine_Core::getTable('Car')->find(array($request->getParameter('id')));
-    $this->forward404Unless($this->car);
-  }
-
-  /**
-   * Create a new car entry associated to a given user
-   *
-   * @param sfWebRequest $request
-   */
-  public function executeNew(sfWebRequest $request)
-  {
-    $this->form = new CarForm();
-    $this->form->setUserId($request->getParameter('user_id'));
-  }
-
-  public function executeCreate(sfWebRequest $request)
-  {
-    $this->forward404Unless($request->isMethod(sfRequest::POST));
-
-    $this->form = new CarForm();
-
-    $this->processForm($request, $this->form);
-
-    $this->setTemplate('new');
-  }
-
-  public function executeEdit(sfWebRequest $request)
-  {
-    $this->forward404Unless($car = Doctrine_Core::getTable('Car')->find(array($request->getParameter('id'))), sprintf('Object car does not exist (%s).', $request->getParameter('id')));
-    $this->form = new CarForm($car);
-  }
-
-  public function executeUpdate(sfWebRequest $request)
-  {
-    $this->forward404Unless($request->isMethod(sfRequest::POST) || $request->isMethod(sfRequest::PUT));
-    $this->forward404Unless($car = Doctrine_Core::getTable('Car')->find(array($request->getParameter('id'))), sprintf('Object car does not exist (%s).', $request->getParameter('id')));
-    $this->form = new CarForm($car);
-
-    $this->processForm($request, $this->form);
-
-    $this->setTemplate('edit');
-  }
-
-  public function executeDelete(sfWebRequest $request)
-  {
-    $request->checkCSRFProtection();
-
-    $this->forward404Unless($car = Doctrine_Core::getTable('Car')->find(array($request->getParameter('id'))), sprintf('Object car does not exist (%s).', $request->getParameter('id')));
-    $car->delete();
-
-    $this->redirect('car/index');
-  }
-
-  protected function processForm(sfWebRequest $request, sfForm $form)
-  {
-    $form->bind($request->getParameter($form->getName()), $request->getFiles($form->getName()));
-    if ($form->isValid())
+    /**
+     * Show a car's details given its numerical ID
+     *
+     * @param sfWebRequest $request
+     */
+    public function executeShow(sfWebRequest $request)
     {
-      $car = $form->save();
-
-      $this->redirect('car/edit?id='.$car->getId());
+        $this->car = CarTable::getInstance()->find(array($request->getParameter('id')));
+        $this->forward404Unless($this->car);
     }
-  }
+
+    /**
+     * Create a new car entry associated to a given user
+     *
+     * @param sfWebRequest $request
+     */
+    public function executeNew(sfWebRequest $request)
+    {
+        $this->form = new CarForm();
+        $this->form->setUserId($request->getParameter('user-id'));
+    }
+
+    /**
+     * Save the details of the new car entry
+     *
+     * @param sfWebRequest $request
+     */
+    public function executeCreate(sfWebRequest $request)
+    {
+        $this->forward404Unless($request->isMethod(sfRequest::POST));
+
+        $this->form = new CarForm();
+
+        $this->processForm($request, $this->form);
+
+        $this->setTemplate('new');
+    }
+
+    /**
+     * Update the information of a car
+     *
+     * @param sfWebRequest $request
+     */
+    public function executeEdit(sfWebRequest $request)
+    {
+        $car = CarTable::getInstance()->find(array($request->getParameter('id')));
+
+        $this->forward404Unless(
+            $car, sprintf('Car does not exist (%s).', $request->getParameter('id'))
+        );
+
+        $this->form = new CarForm($car);
+    }
+
+    /**
+     * Persist the changes of the given car entry
+     *
+     * @param sfWebRequest $request
+     */
+    public function executeUpdate(sfWebRequest $request)
+    {
+        $this->forward404Unless(
+            $request->isMethod(sfRequest::POST) || $request->isMethod(sfRequest::PUT)
+        );
+        $car = CarTable::getInstance()->find(array($request->getParameter('id')));
+
+        $this->forward404Unless(
+            $car, sprintf('Car does not exist (%s).', $request->getParameter('id'))
+        );
+
+        $this->form = new CarForm($car);
+
+        $this->processForm($request, $this->form);
+
+        $this->setTemplate('edit');
+    }
+
+    /**
+     * Perform the deletion of a car information given its numerical ID
+     *
+     * @param sfWebRequest $request
+     */
+    public function executeDelete(sfWebRequest $request)
+    {
+        $request->checkCSRFProtection();
+
+        $car = CarTable::getInstance()->find(array($request->getParameter('id')));
+
+        $this->forward404Unless(
+            $car, sprintf('Car does not exist (%s).', $request->getParameter('id'))
+        );
+
+        $car->delete();
+
+        $this->redirect('user/index');
+    }
+
+    /**
+     * Bind the information in the form with the information in the request
+     *
+     * @param sfWebRequest $request
+     * @param sfForm $form
+     */
+    protected function processForm(sfWebRequest $request, sfForm $form)
+    {
+        $form->bind(
+            $request->getParameter($form->getName()), $request->getFiles($form->getName())
+        );
+
+        if ($form->isValid()) {
+
+            $car = $form->save();
+
+            $this->redirect(
+                'car/edit?user-id=' . $car->getUserId() . '&id=' . $car->getId()
+            );
+        }
+    }
 }

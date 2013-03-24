@@ -12,12 +12,14 @@
     </tr>
   </tbody>
 </table>
+
+<h2>Cars</h2>
+
 <?php if($user->getCar()->count() > 0 ) : ?>
     <table  class="table table-striped table-hover">
       <thead>
         <tr>
-          <th>Brand</th>
-          <th>Model</th>
+          <th>Name</th>
           <th>Color</th>
           <th>Status</th>
           <th>Mileage</th>
@@ -27,11 +29,10 @@
         <?php foreach ($user->getCar() as $car): ?>
         <tr>
           <td>
-              <a href="<?php echo url_for('car/show?id='.$car->getId()) ?>">
-                  <?php echo $car->getBrand() ?>
+              <a href="<?php echo url_for('car/show?user-id=' . $user->getId() . '&id=' . $car->getId()) ?>">
+                  <?php echo $car->getName() ?>
               </a>
           </td>
-          <td><?php echo $car->getModel() ?></td>
           <td><?php echo $car->getColor() ?></td>
           <td><?php echo $car->getStatus() ?></td>
           <td><?php echo $car->getMileage() ?></td>
@@ -48,11 +49,11 @@
 <hr />
 
 <p>
-    <a href="<?php echo url_for('user/edit?id='.$user->getId()) ?>" class="btn">Edit</a>
+    <a href="<?php echo url_for('user/edit?id=' . $user->getId()) ?>" class="btn">Edit</a>
     &nbsp;
     <a href="<?php echo url_for('user/index') ?>" class="btn">List</a>
     &nbsp;
-    <a class="btn btn-primary" href="<?php echo url_for('car/new') ?>?user_id=<?php echo $user->getId() ?>">
+    <a class="btn btn-primary" href="<?php echo url_for('car/new?user-id=' . $user->getId()) ?>">
         Add a new car
     </a>
 </p>

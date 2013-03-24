@@ -15,7 +15,7 @@
                     <span class="icon-bar"></span> <span class="icon-bar"></span> <span
                         class="icon-bar"></span>
                 </button>
-                <a href="#" class="brand active">Car management system</a>
+                <a href="/" class="brand active">Car Management System</a>
                 <div class="nav-collapse collapse">
                     <ul class="nav">
                         <li><a href="/user">Users</a>
@@ -28,7 +28,7 @@
 
     <div class="container content">
         <div class="row">
-            <div class="span12">
+            <div class="offset1 span10">
                 <?php echo $sf_content ?>
             </div>
         </div>

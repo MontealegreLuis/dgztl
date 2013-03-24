@@ -1,9 +1,7 @@
-<table>
+<h1 class="page-header">Car</h1>
+
+<table class="table table-striped table-hover">
   <tbody>
-    <tr>
-      <th>Id:</th>
-      <td><?php echo $car->getId() ?></td>
-    </tr>
     <tr>
       <th>Brand:</th>
       <td><?php echo $car->getBrand() ?></td>
@@ -24,23 +22,17 @@
       <th>Mileage:</th>
       <td><?php echo $car->getMileage() ?></td>
     </tr>
-    <tr>
-      <th>Date created:</th>
-      <td><?php echo $car->getDateCreated() ?></td>
-    </tr>
-    <tr>
-      <th>Date modified:</th>
-      <td><?php echo $car->getDateModified() ?></td>
-    </tr>
-    <tr>
-      <th>User:</th>
-      <td><?php echo $car->getUserId() ?></td>
-    </tr>
   </tbody>
 </table>
 
 <hr />
 
-<a href="<?php echo url_for('car/edit?id='.$car->getId()) ?>">Edit</a>
-&nbsp;
-<a href="<?php echo url_for('car/index') ?>">List</a>
+<p>
+    <a href="<?php echo url_for('car/edit?user-id=' . $car->getUserId() . '&id=' . $car->getId()) ?>" class="btn">
+        Edit
+    </a>
+    &nbsp;
+    <a href="<?php echo url_for('user/show?id=' . $car->getUserId()) ?>" class="btn">
+        User
+    </a>
+</p>
