@@ -15,7 +15,7 @@
                     <span class="icon-bar"></span> <span class="icon-bar"></span> <span
                         class="icon-bar"></span>
                 </button>
-                <a href="/" class="brand active">Car Management System</a>
+                <a href="<?php echo url_for('homepage') ?>" class="brand active">Car Management System</a>
                 <div class="nav-collapse collapse">
                     <ul class="nav">
                         <li><a href="/user">Users</a>
