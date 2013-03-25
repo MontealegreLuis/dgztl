@@ -27,7 +27,7 @@ command in your MySQL server instance.
 You can use your own user by modifying the file `config/databases.yml` providing valid
 credentials.
 
-Run the following command to create the database
+`cd` to your `dgztl` folder and run the following command to create the database
 
     ./symfony doctrine:build-db
     
