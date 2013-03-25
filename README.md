@@ -8,19 +8,36 @@ To install Composer run the folwing command in your Apache document root folder.
 
     curl -s https://getcomposer.org/installer | php
 
-### Generate project
+### Install the project
 
 Create the project using the `composer.phar` file recently downloaded.
 
-    php composer.phar create-project montealegreluis/carmsys dgztl
+    php composer.phar create-project --stability="dev" montealegreluis/carmsys dgztl
 
-This command will install the project in a folder named `dgztl`.
+This command will install the project in a folder named `dgztl`. Enter `Y` when prompted
+to remove the VCS files.
 
-### Install dependencies
+### Create the database and load initial data
 
-Once the project is created, install the dependencies needed to run the project.
+In order to use the configuration in the project as is, you will have to run the following
+command in your MySQL server instance.
 
-    php composer.phar install
+    GRANT ALL PRIVILEGES on car_mgmt_sys.* TO checo_perez@localhost IDENTIFIED BY 'Ch3c0_p3r3z';
+
+You can use your own user by modifying the file `config/databases.yml` providing valid
+credentials.
+
+Run the following command to create the database
+
+    ./symfony doctrine:build-db
+    
+Run the following command to create the database schema
+
+    ./symfony doctrine:insert-sql
+    
+Run the following command to load the initial data
+
+    ./symfony doctrine:data-load
 
 ### Configure a virtual host
 
@@ -48,6 +65,10 @@ Create a symlink to the application assets
 
     cd web/
     ln -s ../lib/vendor/symfony/symfony1/data/web/sf/ sf
+
+Restart Apache
+
+    sudo service httpd restart
 
 ### Run the application
 
