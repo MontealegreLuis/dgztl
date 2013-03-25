@@ -1,6 +1,15 @@
 <h1 class="page-header">User</h1>
 
 <table class="table table-striped table-hover">
+  <thead>
+      <tr>
+        <td colspan="2">
+          <a href="<?php echo url_for('user/index') ?>" class="btn">
+              <i class="icon-chevron-left"></i> Back to users
+          </a>
+        </td>
+      </tr>
+  </thead>
   <tbody>
     <tr>
       <th>First name:</th>
@@ -11,6 +20,15 @@
       <td><?php echo $user->getLastName() ?></td>
     </tr>
   </tbody>
+  <tfoot>
+      <tr>
+        <td colspan="2">
+          <a href="<?php echo url_for('user/edit?id=' . $user->getId()) ?>" class="btn btn-primary">
+              <i class="icon-edit icon-white"></i> Edit user
+          </a>
+        </td>
+      </tr>
+  </tfoot>
 </table>
 
 <h2>Cars</h2>
@@ -49,11 +67,7 @@
 <hr />
 
 <p>
-    <a href="<?php echo url_for('user/edit?id=' . $user->getId()) ?>" class="btn">Edit</a>
-    &nbsp;
-    <a href="<?php echo url_for('user/index') ?>" class="btn">List</a>
-    &nbsp;
     <a class="btn btn-primary" href="<?php echo url_for('car/new?user-id=' . $user->getId()) ?>">
-        Add a new car
+        <i class="icon-ok icon-white"></i> Add a new car
     </a>
 </p>

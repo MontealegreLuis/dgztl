@@ -4,7 +4,7 @@
  *
  * @package    dgztl
  * @subpackage user
- * @author     Luis Montealegre <luis.montealegre@mandragora-web-systems.com>
+ * @author     Luis Montealegre <montealegreluis@gmail.com>
  */
 class userActions extends sfActions
 {
@@ -52,30 +52,25 @@ class userActions extends sfActions
         $this->forward404Unless($request->isMethod(sfRequest::POST));
 
         $this->form = new UserForm();
-
         $this->processForm($request, $this->form);
 
         $this->setTemplate('new');
     }
 
     /**
-     * Populate the form with the current user information in order to allow to update it
+     * Populate the form with the details of a user in order to update them
      *
      * @param sfWebRequest $request
      */
     public function executeEdit(sfWebRequest $request)
     {
-        $user = UserTable::getInstance()->find($request->getParameter('id'));
-
-        $this->forward404Unless(
-            $user, sprintf('Object user does not exist (%s).', $request->getParameter('id'))
-        );
+        $user = $this->retrieveUser($request->getParameter('id'));
 
         $this->form = new UserForm($user);
     }
 
     /**
-     * Update the information of the given user
+     * Persist the changes of a given user entry
      *
      * @param sfWebRequest $request
      */
@@ -85,11 +80,7 @@ class userActions extends sfActions
             $request->isMethod(sfRequest::POST) || $request->isMethod(sfRequest::PUT)
         );
 
-        $user = UserTable::getInstance()->find($request->getParameter('id'));
-        $this->forward404Unless(
-            $user, sprintf('Object user does not exist (%s).', $request->getParameter('id'))
-        );
-
+        $user = $this->retrieveUser($request->getParameter('id'));
         $this->form = new UserForm($user);
 
         $this->processForm($request, $this->form);
@@ -106,11 +97,7 @@ class userActions extends sfActions
     {
         $request->checkCSRFProtection();
 
-        $user = UserTable::getInstance()->find($request->getParameter('id'));
-        $this->forward404Unless(
-            $user, sprintf('Object user does not exist (%s).', $request->getParameter('id'))
-        );
-
+        $user = $this->retrieveUser($request->getParameter('id'));
         $user->delete();
 
         $this->redirect('user/index');
@@ -131,8 +118,21 @@ class userActions extends sfActions
         if ($form->isValid()) {
 
             $user = $form->save();
-
             $this->redirect('user/show?id=' . $user->getId());
         }
+    }
+
+    /**
+     * If no user is found, the current request is forwarded to the 404 page
+     *
+     * @param int $userId
+     * @return User
+     */
+    protected function retrieveUser($userId)
+    {
+        $user = UserTable::getInstance()->find($userId);
+        $this->forward404Unless($user, sprintf('User does not exist (%s).', $userId));
+
+        return $user;
     }
 }

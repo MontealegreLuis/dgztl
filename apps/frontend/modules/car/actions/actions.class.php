@@ -9,14 +9,14 @@
 class carActions extends sfActions
 {
     /**
-     * The list of cars is filtered on the user's show action, and shouldn't be accesed
+     * The list of cars is filtered in the user's show action, and shouldn't be accesed
      * through this controller
      *
      * @param sfWebRequest $request
      */
     public function executeIndex(sfWebRequest $request)
     {
-        $this->forward404();
+        $this->forward404('Page not found');
     }
 
     /**
@@ -26,12 +26,11 @@ class carActions extends sfActions
      */
     public function executeShow(sfWebRequest $request)
     {
-        $this->car = CarTable::getInstance()->find(array($request->getParameter('id')));
-        $this->forward404Unless($this->car);
+        $this->car = $this->retrieveCar($request->getParameter('id'));
     }
 
     /**
-     * Create a new car entry associated to a given user
+     * Show the form to create a new car entry associated to a given user
      *
      * @param sfWebRequest $request
      */
@@ -42,7 +41,7 @@ class carActions extends sfActions
     }
 
     /**
-     * Save the details of the new car entry
+     * Save the details of a new car entry
      *
      * @param sfWebRequest $request
      */
@@ -51,30 +50,25 @@ class carActions extends sfActions
         $this->forward404Unless($request->isMethod(sfRequest::POST));
 
         $this->form = new CarForm();
-
         $this->processForm($request, $this->form);
 
         $this->setTemplate('new');
     }
 
     /**
-     * Update the information of a car
+     * Populate the form with the details of a car in order to update them
      *
      * @param sfWebRequest $request
      */
     public function executeEdit(sfWebRequest $request)
     {
-        $car = CarTable::getInstance()->find(array($request->getParameter('id')));
-
-        $this->forward404Unless(
-            $car, sprintf('Car does not exist (%s).', $request->getParameter('id'))
-        );
+        $car = $this->retrieveCar($request->getParameter('id'));
 
         $this->form = new CarForm($car);
     }
 
     /**
-     * Persist the changes of the given car entry
+     * Persist the changes of a given car entry
      *
      * @param sfWebRequest $request
      */
@@ -83,14 +77,10 @@ class carActions extends sfActions
         $this->forward404Unless(
             $request->isMethod(sfRequest::POST) || $request->isMethod(sfRequest::PUT)
         );
-        $car = CarTable::getInstance()->find(array($request->getParameter('id')));
 
-        $this->forward404Unless(
-            $car, sprintf('Car does not exist (%s).', $request->getParameter('id'))
-        );
+        $car = $this->retrieveCar($request->getParameter('id'));
 
         $this->form = new CarForm($car);
-
         $this->processForm($request, $this->form);
 
         $this->setTemplate('edit');
@@ -105,15 +95,10 @@ class carActions extends sfActions
     {
         $request->checkCSRFProtection();
 
-        $car = CarTable::getInstance()->find(array($request->getParameter('id')));
-
-        $this->forward404Unless(
-            $car, sprintf('Car does not exist (%s).', $request->getParameter('id'))
-        );
-
+        $car = $this->retrieveCar($request->getParameter('id'));
         $car->delete();
 
-        $this->redirect('user/index');
+        $this->redirect('user/show?id=' . $request->getParameter('user-id'));
     }
 
     /**
@@ -131,10 +116,23 @@ class carActions extends sfActions
         if ($form->isValid()) {
 
             $car = $form->save();
-
             $this->redirect(
                 'car/edit?user-id=' . $car->getUserId() . '&id=' . $car->getId()
             );
         }
+    }
+
+    /**
+     * If no car is found, the current request is forwarded to the 404 page
+     *
+     * @param $carId
+     * @return Car
+     */
+    protected function retrieveCar($carId)
+    {
+        $car = CarTable::getInstance()->find(array($carId));
+        $this->forward404Unless($car, sprintf('Car does not exist (%s).', $carId));
+
+        return $car;
     }
 }

@@ -33,3 +33,7 @@ all:
 
     # Enable the database manager
     use_database:           true
+  .actions:
+    #page not found
+    error_404_module:       error
+    error_404_action:       error404

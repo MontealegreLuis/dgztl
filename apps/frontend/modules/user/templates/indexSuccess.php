@@ -24,5 +24,7 @@
 </table>
 
 <p>
-    <a href="<?php echo url_for('user/new') ?>" class="btn btn-primary">New</a>
+    <a href="<?php echo url_for('user/new') ?>" class="btn btn-primary">
+        <i class="icon-ok icon-white"></i> New user
+    </a>
 </p>

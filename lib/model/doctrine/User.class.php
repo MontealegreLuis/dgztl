@@ -16,8 +16,11 @@ class User extends BaseUser
         return sprintf('%s %s', $this->getFirstName(), $this->getLastName());
     }
 
+    /**
+     * @return int
+     */
     public function getCarsCount()
     {
-        return $this->_values['cars_count'];
+        return (int)$this->_values['cars_count'];
     }
 }
